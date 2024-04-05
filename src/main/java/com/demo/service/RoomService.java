@@ -1,6 +1,7 @@
 package com.demo.service;
 
 import com.demo.model.Room;
+import com.demo.payloads.RoomDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

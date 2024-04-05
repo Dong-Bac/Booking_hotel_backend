@@ -3,16 +3,20 @@ package com.demo.service;
 import com.demo.exception.UserAlreadyExistsException;
 import com.demo.model.Role;
 import com.demo.model.User;
+import com.demo.payloads.UserDto;
 import com.demo.repository.RoleRepository;
 import com.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +28,9 @@ public class UserServiceImpl implements UserService{
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public User registerUser(User user) {
         if(userRepository.existsByEmail(user.getEmail())){
@@ -50,7 +57,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUser(String email) {
-            return userRepository.findByEmail(email)
-                    .orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        return userRepository.findByEmail(email)
+                .orElseThrow(()-> new UsernameNotFoundException("User not found"));
+
     }
+
+
 }

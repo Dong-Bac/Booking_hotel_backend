@@ -49,14 +49,14 @@ public class WebSecurityConfig {
         return auth.getAuthenticationManager();
     }
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http
-                .csrf(AbstractHttpConfigurer ::disable)
-                .exceptionHandling(exception->exception.authenticationEntryPoint(jwtAuthEntryPoint))
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth->auth
-                        .requestMatchers("/auth/register-user","/auth/**","/api/rooms/**","/api/bookings/**").permitAll()
-                        .requestMatchers("/api/roles/**").hasRole("ADMIN")
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer :: disable)
+                .exceptionHandling(
+                        exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**", "api/rooms/**","api/bookings/**")
+                        .permitAll().requestMatchers("/roles/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,20 +19,19 @@ public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    private final String jwtSecret="36763979244226452948404D635166546A576D5A7134743777217A25432A462D";
-
-    public static final long JWT_TOKEN_VALIDITY= 5* 60 *60;
+    @Value("${auth.token.jwtSecret}")
+    private  String jwtSecret;
+    @Value("${auth.token.expirationMils}")
+    public int jwtExpirationMs;
 
     public String generateJwtTokenForUser(Authentication authentication){
         HotelUserDetails userPrincipal=(HotelUserDetails) authentication.getPrincipal();
         List<String> roles=userPrincipal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-        Date now=new Date();
-        Date expiryDate =new Date(now.getTime()+JWT_TOKEN_VALIDITY);
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .claim("roles", roles)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime()+jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512,jwtSecret).compact();
     }
 

@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import com.demo.exception.UserAlreadyExistsException;
 import com.demo.model.User;
+import com.demo.payloads.UserDto;
 import com.demo.request.LoginRequest;
 import com.demo.response.JwtResponse;
 import com.demo.security.jwt.JwtUtils;
@@ -41,6 +42,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(
