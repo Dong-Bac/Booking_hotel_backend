@@ -18,7 +18,6 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000/")
 @RequiredArgsConstructor
 public class UserController {
-
     private final UserService userService;
 
     @GetMapping("/all")
@@ -52,5 +51,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting user: " + e.getMessage());
         }
     }
-
 }
